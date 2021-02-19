@@ -1,6 +1,6 @@
 # Dicionário de Dados
 
-![alt text]("Dicionário de dados (Finalizado)_pages-to-jpg-0001.jpg")
+![alt text](Dicionário de dados (Finalizado)_pages-to-jpg-0001.jpg)
 ![alt text](Dicionário de dados (Finalizado)_pages-to-jpg-0002.jpg)
 ![alt text](Dicionário de dados (Finalizado)_pages-to-jpg-0003.jpg)
 ![alt text](Dicionário de dados (Finalizado)_pages-to-jpg-0004.jpg)
