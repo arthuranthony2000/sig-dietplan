@@ -1,6 +1,6 @@
 # Dicionário de Dados
 
-## Uma tabela cujo organiza todos as relações do banco de dados, com dados precisos e estritamente definidos relacionados ao sistema. Todo o tráfego de entrada e saída, armazenamento de dados, fluxo e armazenamento temporário de dados. O dicionário de dados descreve a gramática "quase-forma" dos itens de dados. Informando as tabelas, relacionamentos, domínio dos atributos, classe, dentre outros. Criamos o dicionário de dados para a modelagem relacional do sistema de planejamento alimentar, o dicionário de dados evita redundâncias, inconsistências e melhor modo de entender os dados e suas relações.
+## Resumo: Uma tabela cujo organiza todos as relações do banco de dados, com dados precisos e estritamente definidos relacionados ao sistema. Todo o tráfego de entrada e saída, armazenamento de dados, fluxo e armazenamento temporário de dados. O dicionário de dados descreve a gramática "quase-forma" dos itens de dados. Informando as tabelas, relacionamentos, domínio dos atributos, classe, dentre outros. Criamos o dicionário de dados para a modelagem relacional do sistema de planejamento alimentar, o dicionário de dados evita redundâncias, inconsistências e melhor modo de entender os dados e suas relações.
 
 ![Bilby Stampede](https://github.com/arthuranthony2000/SIG-DIETPLAN/blob/master/docs/Dicion%C3%A1rio%20de%20dados/Dicion%C3%A1rio%20de%20dados%20(Finalizado)_pages-to-jpg-0001.jpg)
 
