@@ -1,6 +1,6 @@
 # Dicionário de Dados
 
-![Bilby Stampede](Dicionário de dados (Finalizado)_pages-to-jpg-0001.jpg)
+![Bilby Stampede](https://github.com/arthuranthony2000/SIG-DIETPLAN/blob/master/docs/Dicionário de dados/Dicionário de dados (Finalizado)_pages-to-jpg-0001.jpg)
 ![alt text](Dicionário de dados (Finalizado)_pages-to-jpg-0002.jpg)
 ![alt text](Dicionário de dados (Finalizado)_pages-to-jpg-0003.jpg)
 ![alt text](Dicionário de dados (Finalizado)_pages-to-jpg-0004.jpg)
