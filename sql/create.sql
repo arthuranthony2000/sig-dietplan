@@ -13,6 +13,7 @@ CREATE TABLE db_sigdietplan.usuario(
     senha VARCHAR(100) NOT NULL,
     tipo INT NOT NULL,
 	status BOOLEAN DEFAULT 0,
+    CHECK(tipo >= 0 AND tipo <= 2),
     PRIMARY KEY(nome)
 );
 
@@ -21,6 +22,7 @@ CREATE TABLE db_sigdietplan.usuario_comunicacao(
     mensagem TEXT NOT NULL,
     usuario_emissor VARCHAR(100) NOT NULL,
     usuario_receptor VARCHAR(100) NOT NULL,
+    data_de_envio DATETIME,
     PRIMARY KEY(id),
     FOREIGN KEY(usuario_emissor) REFERENCES db_sigdietplan.usuario(nome),
     FOREIGN KEY(usuario_receptor) REFERENCES db_sigdietplan.usuario(nome)
@@ -32,6 +34,7 @@ CREATE TABLE db_sigdietplan.processo(
 	descricao TEXT NOT NULL,
 	tipo INT NOT NULL,
 	situacao INT DEFAULT 0,
+    CHECK(tipo >= 0 AND tipo <= 3),
     PRIMARY KEY(id),
     FOREIGN KEY(nome) REFERENCES db_sigdietplan.usuario(nome)
 );
@@ -39,7 +42,7 @@ CREATE TABLE db_sigdietplan.processo(
 CREATE TABLE db_sigdietplan.administrador(
 	id INT AUTO_INCREMENT,
 	nome VARCHAR(100),
-    nome_usuario VARCHAR(100) NOT NULL,
+    nome_usuario VARCHAR(100) NOT NULL UNIQUE,
     PRIMARY KEY(id),
     FOREIGN KEY(nome_usuario) REFERENCES db_sigdietplan.usuario(nome)
 );
@@ -47,7 +50,7 @@ CREATE TABLE db_sigdietplan.administrador(
 CREATE TABLE db_sigdietplan.nutricionista(
 	id INT AUTO_INCREMENT,
 	nome VARCHAR(100),
-    nome_usuario VARCHAR(100) NOT NULL,
+    nome_usuario VARCHAR(100) NOT NULL UNIQUE,
     PRIMARY KEY(id),
     FOREIGN KEY(nome_usuario) REFERENCES db_sigdietplan.usuario(nome)
 );
@@ -58,7 +61,7 @@ CREATE TABLE db_sigdietplan.consumidor(
 	idade INT,
     peso FLOAT,
     altura INT,
-    nome_usuario VARCHAR(100) NOT NULL,
+    nome_usuario VARCHAR(100) NOT NULL UNIQUE,
     PRIMARY KEY(id),
     FOREIGN KEY(nome_usuario) REFERENCES db_sigdietplan.usuario(nome)
 );
@@ -69,6 +72,7 @@ CREATE TABLE db_sigdietplan.cardapio(
     garantia INT,
 	tipo INT,
 	descricao TEXT,
+    CHECK(tipo >= 0 AND tipo <= 2),
     PRIMARY KEY(id)
 );
 
@@ -100,10 +104,11 @@ CREATE TABLE db_sigdietplan.forma_pagamento(
 );
 
 CREATE TABLE db_sigdietplan.cartao_credito(
-	numero INT,
+	numero VARCHAR(30),
 	nomeTitular VARCHAR(100) NOT NULL,
 	data_validade VARCHAR(7) NOT NULL,
-    bandeira VARCHAR(10) NOT NULL,
+    bandeira VARCHAR(30) NOT NULL,
+    codigo_seguranca INT NOT NULL,
     consumidor_id INT NOT NULL,
     PRIMARY KEY(numero),
     FOREIGN KEY(consumidor_id) REFERENCES db_sigdietplan.consumidor(id)
@@ -157,7 +162,7 @@ CREATE TABLE db_sigdietplan.relatorio(
 CREATE TABLE db_sigdietplan.cartao_credito_pagamento(
 	id INT AUTO_INCREMENT,
     parcelamento INT NOT NULL,
-	numero_cartao INT NOT NULL,
+	numero_cartao VARCHAR(30) NOT NULL,
     pedido_id INT NOT NULL,
     PRIMARY KEY(id),
     FOREIGN KEY(numero_cartao) REFERENCES db_sigdietplan.cartao_credito(numero),
