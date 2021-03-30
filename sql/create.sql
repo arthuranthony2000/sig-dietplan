@@ -24,8 +24,8 @@ CREATE TABLE db_sigdietplan.usuario_comunicacao(
     usuario_receptor VARCHAR(100) NOT NULL,
     data_de_envio DATETIME,
     PRIMARY KEY(id),
-    FOREIGN KEY(usuario_emissor) REFERENCES db_sigdietplan.usuario(nome),
-    FOREIGN KEY(usuario_receptor) REFERENCES db_sigdietplan.usuario(nome)
+    FOREIGN KEY(usuario_emissor) REFERENCES db_sigdietplan.usuario(nome) ON UPDATE CASCADE ON DELETE CASCADE,
+    FOREIGN KEY(usuario_receptor) REFERENCES db_sigdietplan.usuario(nome) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 CREATE TABLE db_sigdietplan.processo(
@@ -36,7 +36,7 @@ CREATE TABLE db_sigdietplan.processo(
 	situacao INT DEFAULT 0,
     CHECK(tipo >= 0 AND tipo <= 3),
     PRIMARY KEY(id),
-    FOREIGN KEY(nome) REFERENCES db_sigdietplan.usuario(nome)
+    FOREIGN KEY(nome) REFERENCES db_sigdietplan.usuario(nome) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 CREATE TABLE db_sigdietplan.administrador(
@@ -44,7 +44,7 @@ CREATE TABLE db_sigdietplan.administrador(
 	nome VARCHAR(100),
     nome_usuario VARCHAR(100) NOT NULL UNIQUE,
     PRIMARY KEY(id),
-    FOREIGN KEY(nome_usuario) REFERENCES db_sigdietplan.usuario(nome)
+    FOREIGN KEY(nome_usuario) REFERENCES db_sigdietplan.usuario(nome) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 CREATE TABLE db_sigdietplan.nutricionista(
@@ -52,7 +52,7 @@ CREATE TABLE db_sigdietplan.nutricionista(
 	nome VARCHAR(100),
     nome_usuario VARCHAR(100) NOT NULL UNIQUE,
     PRIMARY KEY(id),
-    FOREIGN KEY(nome_usuario) REFERENCES db_sigdietplan.usuario(nome)
+    FOREIGN KEY(nome_usuario) REFERENCES db_sigdietplan.usuario(nome) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 CREATE TABLE db_sigdietplan.consumidor(
@@ -63,7 +63,7 @@ CREATE TABLE db_sigdietplan.consumidor(
     altura INT,
     nome_usuario VARCHAR(100) NOT NULL UNIQUE,
     PRIMARY KEY(id),
-    FOREIGN KEY(nome_usuario) REFERENCES db_sigdietplan.usuario(nome)
+    FOREIGN KEY(nome_usuario) REFERENCES db_sigdietplan.usuario(nome) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 CREATE TABLE db_sigdietplan.cardapio(
@@ -93,14 +93,8 @@ CREATE TABLE db_sigdietplan.cardapio_alimento(
     alimento_id INT NOT NULL,
 	cardapio_id INT NOT NULL,
     PRIMARY KEY(id),
-    FOREIGN KEY(alimento_id) REFERENCES db_sigdietplan.alimento(id),
-    FOREIGN KEY(cardapio_id) REFERENCES db_sigdietplan.cardapio(id)
-);
-
-CREATE TABLE db_sigdietplan.forma_pagamento(
-	id INT AUTO_INCREMENT,
-	nome enum('boleto', 'cartao') NOT NULL,
-	PRIMARY KEY(id)
+    FOREIGN KEY(alimento_id) REFERENCES db_sigdietplan.alimento(id) ON UPDATE CASCADE ON DELETE CASCADE,
+    FOREIGN KEY(cardapio_id) REFERENCES db_sigdietplan.cardapio(id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 CREATE TABLE db_sigdietplan.cartao_credito(
@@ -111,71 +105,72 @@ CREATE TABLE db_sigdietplan.cartao_credito(
     codigo_seguranca INT NOT NULL,
     consumidor_id INT NOT NULL,
     PRIMARY KEY(numero),
-    FOREIGN KEY(consumidor_id) REFERENCES db_sigdietplan.consumidor(id)
+    FOREIGN KEY(consumidor_id) REFERENCES db_sigdietplan.consumidor(id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 CREATE TABLE db_sigdietplan.acompanhamento(
 	id INT AUTO_INCREMENT,
     title VARCHAR(100) NOT NULL,
     descricao TEXT NOT NULL,
-	data_inicio DATE NOT NULL,
-    data_final DATE NOT NULL,
+	data_inicio DATETIME NOT NULL,
+    data_final DATETIME NOT NULL,
     consumidor_id INT NOT NULL,
     nutricionista_id INT NOT NULL,
-    cardapio_id INT NOT NULL,
     pedido_id INT NOT NULL UNIQUE,
     PRIMARY KEY(id),
-    FOREIGN KEY(consumidor_id) REFERENCES db_sigdietplan.consumidor(id),
-    FOREIGN KEY(nutricionista_id) REFERENCES db_sigdietplan.nutricionista(id),
-    FOREIGN KEY(cardapio_id) REFERENCES db_sigdietplan.cardapio(id)
+    FOREIGN KEY(consumidor_id) REFERENCES db_sigdietplan.consumidor(id) ON UPDATE CASCADE ON DELETE CASCADE,
+    FOREIGN KEY(nutricionista_id) REFERENCES db_sigdietplan.nutricionista(id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 CREATE TABLE db_sigdietplan.pedido(
 	id INT AUTO_INCREMENT,
-    valor FLOAT NOT NULL,
     desconto FLOAT DEFAULT 0,
-    data DATE NOT NULL,
-    finalizado BOOLEAN,
-    forma_pagamento_id INT NOT NULL,
-    acompanhamento_id INT NOT NULL UNIQUE,
+    data DATETIME NOT NULL,
+    finalizado BOOLEAN DEFAULT 0,
+    forma_pagamento enum('boleto', 'cartao') NOT NULL,
     consumidor_id INT NOT NULL,
     cardapio_id INT NOT NULL,
     PRIMARY KEY(id),
-    FOREIGN KEY(forma_pagamento_id) REFERENCES db_sigdietplan.forma_pagamento(id),
-    FOREIGN KEY(acompanhamento_id) REFERENCES db_sigdietplan.acompanhamento(id),
-	FOREIGN KEY(consumidor_id) REFERENCES db_sigdietplan.consumidor(id),
-    FOREIGN KEY(cardapio_id) REFERENCES db_sigdietplan.cardapio(id)
+	FOREIGN KEY(consumidor_id) REFERENCES db_sigdietplan.consumidor(id) ON UPDATE CASCADE ON DELETE CASCADE,
+    FOREIGN KEY(cardapio_id) REFERENCES db_sigdietplan.cardapio(id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
-ALTER TABLE db_sigdietplan.acompanhamento ADD FOREIGN KEY(pedido_id) REFERENCES db_sigdietplan.pedido(id);
+ALTER TABLE db_sigdietplan.acompanhamento ADD FOREIGN KEY(pedido_id) REFERENCES db_sigdietplan.pedido(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 CREATE TABLE db_sigdietplan.relatorio(
 	id INT AUTO_INCREMENT,
     nome VARCHAR(100) NOT NULL,
     descricao TEXT NOT NULL,
-    data DATE NOT NULL,
+    data DATETIME NOT NULL,
 	acompanhamento_id INT NOT NULL,
     PRIMARY KEY(id),
-    FOREIGN KEY(acompanhamento_id) REFERENCES db_sigdietplan.acompanhamento(id)
+    FOREIGN KEY(acompanhamento_id) REFERENCES db_sigdietplan.acompanhamento(id) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+CREATE TABLE db_sigdietplan.anexo(
+	id INT AUTO_INCREMENT,
+    link VARCHAR(1000),
+    relatorio_id INT NOT NULL,
+    PRIMARY KEY(id),
+    FOREIGN KEY(relatorio_id) REFERENCES db_sigdietplan.relatorio(id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 CREATE TABLE db_sigdietplan.cartao_credito_pagamento(
 	id INT AUTO_INCREMENT,
     parcelamento INT NOT NULL,
 	numero_cartao VARCHAR(30) NOT NULL,
-    pedido_id INT NOT NULL,
+    pedido_id INT NOT NULL UNIQUE,
     PRIMARY KEY(id),
-    FOREIGN KEY(numero_cartao) REFERENCES db_sigdietplan.cartao_credito(numero),
-    FOREIGN KEY(pedido_id) REFERENCES db_sigdietplan.pedido(id)
+    FOREIGN KEY(numero_cartao) REFERENCES db_sigdietplan.cartao_credito(numero) ON UPDATE CASCADE ON DELETE CASCADE,
+    FOREIGN KEY(pedido_id) REFERENCES db_sigdietplan.pedido(id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 CREATE TABLE db_sigdietplan.boleto_bancario(
 	codigo_barras VARCHAR(50),
-	valor_total FLOAT NOT NULL,
     data_vencimento DATE NOT NULL,
-    pedido_id INT NOT NULL,
+    pedido_id INT NOT NULL UNIQUE,
     PRIMARY KEY(codigo_barras),
-    FOREIGN KEY(pedido_id) REFERENCES db_sigdietplan.pedido(id)
+    FOREIGN KEY(pedido_id) REFERENCES db_sigdietplan.pedido(id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 
